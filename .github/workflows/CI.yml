@@ -56,7 +56,7 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: |
-            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitans/projects:frontend
+            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitan/project:frontend-latest
 
       
       - name: Build and push Docker image from backend
@@ -66,5 +66,5 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitans/projects:backend
+            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitan/project:backend-latest
 
