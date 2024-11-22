@@ -29,7 +29,7 @@ jobs:
 
       - uses: GuillaumeFalourd/wait-sleep-action@v1
         with:
-          time: '30'
+          time: '15'
 
 
       - name: tests by using curl
@@ -44,10 +44,27 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
 
-      - name: upload image to ECR
-        uses: appleboy/docker-ecr-action@master
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 992382853618.dkr.ecr.us-east-1.amazonaws.com
+
+
+      - name: Build and push Docker image from frontend
+        uses: docker/build-push-action@v5
         with:
-          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          repo: eitans/projects
-          registry: ${{ secrets.AWS_REPOSITORY }}
+          context: .
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitans/projects:frontend
+
+      
+      - name: Build and push Docker image from backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            992382853618.dkr.ecr.us-east-1.amazonaws.com/eitans/projects:backend
+
